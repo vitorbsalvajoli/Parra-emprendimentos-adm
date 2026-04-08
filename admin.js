@@ -492,3 +492,80 @@ document.querySelectorAll('.modal').forEach(modal => {
         }
     });
 });
+// ===================================
+// SETTINGS MANAGEMENT
+// ===================================
+const Settings = {
+    getDefault() {
+        return {
+            siteName: 'Parra Empreendimentos',
+            siteSlogan: 'Especialistas em terrenos exclusivos',
+            siteDescription: 'Construa seu legado com quem entende do assunto.',
+            contactPhone: '(62) 99999-9999',
+            contactEmail: 'contato@parraempreendimentos.com.br',
+            contactAddress: 'Av. T-4, 1234 - Setor Bueno, Goiânia - GO',
+            socialFacebook: '',
+            socialInstagram: '',
+            socialLinkedIn: '',
+            socialWhatsApp: '5562999999999'
+        };
+    },
+    
+    get() {
+        const settings = localStorage.getItem('parra_blog_settings');
+        return settings ? JSON.parse(settings) : this.getDefault();
+    },
+    
+    save(settings) {
+        localStorage.setItem('parra_blog_settings', JSON.stringify(settings));
+    },
+    
+    loadToForm() {
+        const settings = this.get();
+        document.getElementById('siteName').value = settings.siteName || '';
+        document.getElementById('siteSlogan').value = settings.siteSlogan || '';
+        document.getElementById('siteDescription').value = settings.siteDescription || '';
+        document.getElementById('contactPhone').value = settings.contactPhone || '';
+        document.getElementById('contactEmail').value = settings.contactEmail || '';
+        document.getElementById('contactAddress').value = settings.contactAddress || '';
+        document.getElementById('socialFacebook').value = settings.socialFacebook || '';
+        document.getElementById('socialInstagram').value = settings.socialInstagram || '';
+        document.getElementById('socialLinkedIn').value = settings.socialLinkedIn || '';
+        document.getElementById('socialWhatsApp').value = settings.socialWhatsApp || '';
+    }
+};
+
+// Settings Form Handler
+document.getElementById('settingsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const settings = {
+        siteName: document.getElementById('siteName').value,
+        siteSlogan: document.getElementById('siteSlogan').value,
+        siteDescription: document.getElementById('siteDescription').value,
+        contactPhone: document.getElementById('contactPhone').value,
+        contactEmail: document.getElementById('contactEmail').value,
+        contactAddress: document.getElementById('contactAddress').value,
+        socialFacebook: document.getElementById('socialFacebook').value,
+        socialInstagram: document.getElementById('socialInstagram').value,
+        socialLinkedIn: document.getElementById('socialLinkedIn').value,
+        socialWhatsApp: document.getElementById('socialWhatsApp').value
+    };
+    
+    Settings.save(settings);
+    alert('Configurações salvas com sucesso!');
+});
+
+// Update initAdmin to include settings
+const originalInitAdmin = typeof initAdmin !== 'undefined' ? initAdmin : null;
+document.addEventListener('DOMContentLoaded', function() {
+    // Load settings when settings tab is opened
+    const settingsTab = document.querySelector('[data-tab="settings"]');
+    if (settingsTab) {
+        settingsTab.addEventListener('click', function(e) {
+            e.preventDefault();
+            Settings.loadToForm();
+            switchTab('settings');
+        });
+    }
+});
