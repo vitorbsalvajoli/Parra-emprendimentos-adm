@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Blog Parra Empreendimentos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-logo">
+                <i class="fas fa-tree"></i>
+                <h2>Parra Empreendimentos</h2>
+                <p>Painel Administrativo do Blog</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label>Usuário</label>
+                    <input type="text" id="username" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+                <p class="login-hint">Use: admin / admin123</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-tree"></i>
+                <span>Parra Blog</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="posts">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Posts</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="new-post">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Novo Post</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="categories">
+                    <i class="fas fa-folder"></i>
+                    <span>Categorias</span>
+                </a>
+                <a href="../blog.html" class="nav-item" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Ver Blog</span>
+                </a>
+                <a href="#" class="nav-item logout" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sair</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Dashboard Tab -->
+            <div id="dashboardTab" class="tab-content active">
+                <div class="admin-header">
+                    <h1>Dashboard</h1>
+                    <p>Visão geral do seu blog</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-newspaper"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalPosts">0</span>
+                            <span class="stat-label">Total de Posts</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-folder"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalCategories">0</span>
+                            <span class="stat-label">Categorias</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-eye"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="totalViews">0</span>
+                            <span class="stat-label">Visualizações</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-calendar"></i>
+                        <div class="stat-info">
+                            <span class="stat-number" id="lastPost">-</span>
+                            <span class="stat-label">Último Post</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="recent-posts">
+                    <h2>Posts Recentes</h2>
+                    <div id="recentPostsList" class="posts-list"></div>
+                </div>
+            </div>
+
+            <!-- Posts Tab -->
+            <div id="postsTab" class="tab-content">
+                <div class="admin-header">
+                    <h1>Gerenciar Posts</h1>
+                    <p>Edite ou exclua posts existentes</p>
+                </div>
+                <div class="posts-table-wrapper">
+                    <table class="posts-table">
+                        <thead>
+                            <tr>
+                                <th>Imagem</th>
+                                <th>Título</th>
+                                <th>Categoria</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="postsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- New Post Tab -->
+            <div id="newPostTab" class="tab-content">
+                <div class="admin-header">
+                    <h1 id="postFormTitle">Novo Post</h1>
+                    <p>Crie ou edite um post do blog</p>
+                </div>
+                <form id="postForm" class="post-form">
+                    <input type="hidden" id="postId">
+                    <div class="form-row">
+                        <div class="form-group main-content">
+                            <label>Título *</label>
+                            <input type="text" id="postTitle" required placeholder="Digite o título do post">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>URL da Imagem *</label>
+                            <input type="url" id="postImage" required placeholder="https://exemplo.com/imagem.jpg">
+                            <small>Cole a URL de uma imagem da internet</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria *</label>
+                            <select id="postCategory" required>
+                                <option value="">Selecione uma categoria</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Autor</label>
+                            <input type="text" id="postAuthor" value="Daiane Parra" placeholder="Nome do autor">
+                        </div>
+                        <div class="form-group">
+                            <label>Data de Publicação</label>
+                            <input type="date" id="postDate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Resumo/Excerpt *</label>
+                        <textarea id="postExcerpt" required rows="3" placeholder="Um breve resumo do post (aparecerá na listagem)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Conteúdo Completo *</label>
+                        <div class="editor-toolbar">
+                            <button type="button" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                            <button type="button" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                            <button type="button" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                            <button type="button" onclick="formatText('insertUnorderedList')"><i class="fas fa-list-ul"></i></button>
+                            <button type="button" onclick="formatText('insertOrderedList')"><i class="fas fa-list-ol"></i></button>
+                            <button type="button" onclick="formatText('createLink')"><i class="fas fa-link"></i></button>
+                            <button type="button" onclick="formatText('formatBlock', 'H2')"><i class="fas fa-heading"></i></button>
+                        </div>
+                        <div id="postContent" class="editor-content" contenteditable="true" data-placeholder="Digite o conteúdo do post..."></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="cancelPost()">Cancelar</button>
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i> Salvar Post
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Categories Tab -->
+            <div id="categoriesTab" class="tab-content">
+                <div class="admin-header">
+                    <h1>Categorias</h1>
+                    <p>Gerencie as categorias do blog</p>
+                </div>
+                <div class="categories-container">
+                    <div class="add-category">
+                        <h3>Adicionar Nova Categoria</h3>
+                        <form id="categoryForm" class="category-form">
+                            <input type="text" id="categoryName" placeholder="Nome da categoria" required>
+                            <button type="submit" class="btn-save"><i class="fas fa-plus"></i> Adicionar</button>
+                        </form>
+                    </div>
+                    <div class="categories-list" id="categoriesList"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Post Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Post</h2>
+                <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editPostForm">
+                    <input type="hidden" id="editPostId">
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" id="editPostTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>URL da Imagem</label>
+                        <input type="url" id="editPostImage" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="editPostCategory" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Resumo</label>
+                        <textarea id="editPostExcerpt" required rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Conteúdo</label>
+                        <div id="editPostContent" class="editor-content" contenteditable="true"></div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+                        <button type="submit" class="btn-save"><i class="fas fa-save"></i> Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Confirmar Exclusão</h2>
+                <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir este post? Esta ação não pode ser desfeita.</p>
+                <div class="form-actions">
+                    <button class="btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
+                    <button class="btn-delete" onclick="confirmDelete()"><i class="fas fa-trash"></i> Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
